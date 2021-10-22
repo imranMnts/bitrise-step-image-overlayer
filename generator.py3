@@ -4,48 +4,53 @@ from PIL import Image
 import sys
 
 # Function to change the image size
-def changeImageSizeWithRatio(appIcon, overlayPath):
-  appIconWidth = appIcon.size[0]
-  appIconHeight = appIcon.size[1]
+def changeImageSizeWithRatio(background, overlay):
+  backgroundWidth = background.size[0]
+  backgroundHeight = background.size[1]
 
-  overlay = Image.open(overlayPath)
-  overlay = appIcon.convert("RGBA")
   overlayWidth = overlay.size[0]
   overlayHeight = overlay.size[1]
 
   if overlayWidth > overlayHeight:
-    width = appIconWidth/2
+    width = backgroundWidth/2
     widthPercent = (width / float(overlayWidth))
     height = int((float(overlayHeight) * float(widthPercent)))
   else:
-    height = appIconHeight/3
+    height = backgroundHeight/3
     heightPercent = (height / float(overlayHeight))
     width = int((float(overlayWidth) * float(heightPercent)))
-
   return overlay.resize((int(width), int(height)))
 
-def customize_image(appIcon, resultIcon, leftIconPath, rightIconPath, outputPath):
+def customizeImage(backgroundPath, leftIconPath, rightIconPath, outputPath):
+  background = Image.open(backgroundPath)
+  background = background.convert("RGBA")
+  padding = int(background.size[0] / 20)
+  if (padding > 10):
+    padding = 10
+  result = background.copy()
   if len(leftIconPath):
     leftIcon = Image.open(leftIconPath)
     leftIcon = leftIcon.convert("RGBA")
-    leftIcon = changeImageSizeWithRatio(appIcon, leftIcon)
-    result.paste(leftIcon, (10, appIcon.size[1] - leftIcon.size[1] - 10), leftIcon)
+    leftIcon = changeImageSizeWithRatio(background, leftIcon)
+    result.paste(leftIcon, (padding, background.size[1] - leftIcon.size[1] - padding), leftIcon)
   if len(rightIconPath):
     rightIcon = Image.open(rightIconPath)
     rightIcon = rightIcon.convert("RGBA")
-    rightIcon = changeImageSizeWithRatio(appIcon, rightIcon)
-    result.paste(rightIcon, (10, appIcon.size[1] - rightIcon.size[1] - 10), rightIcon)
+    rightIcon = changeImageSizeWithRatio(background, rightIcon)
+    result.paste(rightIcon, (background.size[0] - rightIcon.size[0] - padding, background.size[1] - rightIcon.size[1] - padding), rightIcon)
   result.save(outputPath, quality=100)
 
 
-def find_and_customize_images(basepath, leftIconPath, rightIconPath):
+def findAndCustomizeImages(basepath, leftIconPath, rightIconPath):
   for fileName in listdir(basepath):
     fullPath = basepath + fileName
+    if not path.exists(fullPath):
+      print("!! Image not found, please check the path )")
+      print("!! Path: " + fullPath)
+      sys.exit(1)
 
     if path.isfile(fullPath) and (fullPath.endswith('.png') or fullPath.endswith('.jpg')):
-      appIcon = Image.open(appIconPath)
-      appIcon = appIcon.convert("RGBA")
-      customize_image(appIcon, leftIconPath, rightIconPath)
+      customizeImage(fullPath, leftIconPath, rightIconPath, fullPath)
 
 if (not sys.argv[1]):
   print("!! Empty background (first parameter)")
@@ -56,43 +61,41 @@ if len(sys.argv) < 3:
   print("!! Fill blank string if not needed")
   sys.exit(1)
 
-appIconPath = sys.argv[1]
-appIcon = Image.open(appIconPath)
-appIcon = appIcon.convert("RGBA")
+backgroundPath = sys.argv[1]
+if not path.exists(backgroundPath):
+  print("!! Background image not found, please check the path )")
+  print("!! Path: " + backgroundPath)
+  sys.exit(1)
 
-if len(sys.argv[4]):
+if len(sys.argv) > 4 and len(sys.argv[4]):
   outputPath = sys.argv[4]
   print('outputPath : ', outputPath)
-  result = appIcon.copy()
-else
-  
-
-if len(outputPath):
+else:
+  outputPath = backgroundPath
 
 if(len(sys.argv[2])):
   leftIconPath = sys.argv[2]
-  leftIcon = Image.open(leftIconPath)
-  leftIcon = leftIcon.convert("RGBA")
-  leftIcon = changeImageSizeWithRatio(appIcon, leftIcon)
-  result.paste(leftIcon, (10, appIcon.size[1] - leftIcon.size[1] - 10), leftIcon)
+  if not path.exists(leftIconPath):
+    print("!! Left icon not found, please check the path )")
+    print("!! Path: " + leftIconPath)
+    sys.exit(1)
+else:
+  leftIconPath = ""
 
 if((len(sys.argv) > 3) and (len(sys.argv[3]))):
-  if (len(sys.argv[3])):
-    rightIconPath = sys.argv[3]
-    rightIcon = Image.open(rightIconPath)
-    rightIcon = rightIcon.convert("RGBA")
-    rightIcon = changeImageSizeWithRatio(appIcon, rightIcon)
-    result.paste(rightIcon, (appIcon.size[0] - rightIcon.size[0] - 10, appIcon.size[1] - rightIcon.size[1] - 10), rightIcon)
-  elif (not leftIconPath):
-    print("!! Script required at least 2 parameters (background, leftOverlay?, rightOverlay?)")
-    print("!! Fill blank strings if not needed, BUT you cannot have 2 empty strings for overlays")
+  rightIconPath = sys.argv[3]
+  if not path.exists(rightIconPath):
+    print("!! Right icon not found, please check the path )")
+    print("!! Path: " + rightIconPath)
     sys.exit(1)
 elif not leftIconPath:
   print("!! Script required at least 2 parameters (background, leftOverlay, rightOverlay)")
   print("!! Fill blank strings if not needed, BUT you cannot have 2 empty strings for overlays")
   sys.exit(1)
-
-if path.isfile(appIconPath):
-  customize_image(appIconPath, leftIconPath, rightIconPath, outputPath)
 else:
-  find_and_customize_images(appIconPath, leftIconPath, rightIconPath, outputPath)
+  rightIconPath = ""
+
+if path.isfile(backgroundPath):
+  customizeImage(backgroundPath, leftIconPath, rightIconPath, outputPath)
+else:
+  findAndCustomizeImages(backgroundPath, leftIconPath, rightIconPath)
