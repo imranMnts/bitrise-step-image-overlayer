@@ -12,19 +12,15 @@ title: |-
 summary: |
   Add icon to an image
 description: |
-  Check mobile applications permissions and compare with configured values to be warned when new permissions have been added
+  This step will add icon (on the left and/or right bottom side) on the source image.
 
   ### Usage
 
-  To give to our step the information about the expected values, you have:
-  - create a config file (which should be added to your project repository) and set `config_file_path`  to find them. You can find a config example file [here](https://github.com/imranMnts/bitrise-step-image-overlayer#config-file-example)
-  - **OR** set these keys with expected values directly on Bitrise side
-    - android_permission_count
-    - ios_permission_count
-
-  ### Troubleshooting
-
-  - Be aware, you have to launch this step after [apps-decompiler](https://github.com/imranMnts/bitrise-step-apps-decompiler) step
+  To give to our step the information about the expected values:
+  - Provide the source image's (or folder's) **path**, where we have the image or list of images on which we will add the icon(s)
+    - You can provide just one image's path, the step will add icons to this one only
+    - You can provide a folder's path where we many images, the step will add icons to them
+  - Left **and/or** right icons which will be added on the source image
 
 website: https://github.com/odemolliens/bitrise-step-image-overlayer
 source_code_url: https://github.com/odemolliens/bitrise-step-image-overlayer
@@ -41,76 +37,41 @@ toolkit:
   bash:
     entry_file: step.sh
 inputs:
-  - source_image: "yes"
+  - source_image: ""
     opts:
-      title: "Check Android"
-      summary: "Do you want check Android permissions?"
-      description: "To check or not Android permissions"
+      title: "Source image or folder path"
+      summary: "Source image or folder path?"
+      description: |
+        Source image's (or folder's) **path**, where we have the image or list of images on which we will add the icon(s)
+          - You can provide just one image's path, the step will add icons to this one only (eg.: `./src/assets/app_icon.png`)
+          - You can provide a folder's path where we many images, the step will add icons to them (eg.: `./src/assets/`)
       is_expand: true
       is_required: true
+  - left_icon: ""
+    opts:
+      title: "Left icon's path"
+      summary: "Left icon's path"
+      description: "The path of the icon which will be added on the left side of the source image(s) (eg. `./src/assets/left_icon.png)"
+      is_expand: true
+      is_required: false
       value_options:
         - "yes"
         - "no"
-  - check_ios: "yes"
+  - right_icon: ""
     opts:
-      title: "Check iOS"
-      summary: "Do you want check iOS permissions?"
-      description: "To check or not iOS permissions"
+      title: "Right icon's path"
+      summary: "Right icon's path"
+      description: "The path of the icon which will be added on the right side of the source image(s) (eg. `./src/assets/right_icon.png)"
       is_expand: true
-      is_required: true
-      value_options:
-        - "yes"
-        - "no"
-  - ios_app_name:
+      is_required: false
+  - output_path: ""
     opts:
-      title: "iOS app name (Display Name)"
-      description: |
-        You have to set this key if you want check ios permissions.
-        If not, you can set an empty string.
-
-        You can find it on xcode -> General -> Display Name
+      title: "Output file's path"
+      summary: "Output file's path"
+      description: "Per default, the script will replace the original source image. If this key is provided, it will create a new one at this path. (eg. `./src/assets/result.png)"
       is_expand: true
-      is_required: true
-  - config_file_path:
-    opts:
-      title: "Config file path"
-      summary: "Path of the config file"
-      description: |
-        The config file where we have some information like the current Android app size eg. to compare with next builds and alert if needed.
-        If you want use Environment Variables instead of the config file, do not set this key and add variables. (See [README](https://github.com/imranMnts/bitrise-step-image-overlayer/blob/master/README.md) to see all needed variables)
-      is_expand: false
-      is_required: false
-  - android_permission_count:
-    opts:
-      title: "Android permission"
-      summary: "Number of permission into your AndroidManifest.xml"
-      description: |
-        Set this key if you want to follow up the count of permission used by your Android app and be aware when useless permission added to your AndroidManifest.xml
-
-        To know how many permission you have currently in your app, you can check your APK's manifest to know the exact count.
-
-        You can add a config file where you can add all application information and set `config_file_path` to find it.
-
-        Tip: You can set it to 0 and launch one time this step to check report file to know the current value.
-      is_expand: false
-      is_required: false
-  - ios_permission_count:
-    opts:
-      title: "iOS permission"
-      summary: "Number of permission into your Info.plist"
-      description: |
-        Set this key if you want to follow up the count of permission used by your ios app and be aware when useless permission added to your Info.plist
-        To know how many permission you have currently in your app, you can check your IPA's Info.plist to know the exact count.
-
-        You can add a config file where you can add all application information and set `config_file_path` to find it.
-
-        Tip: You can set it to 0 and launch one time this step to check report file to know the current value.
-      is_expand: false
       is_required: false
 outputs:
-  - IOS_PERMISSION_COUNT:
+  - OVERLAYED_IMAGE:
     opts:
-      title: Current build's ios permission count
-  - ANDROID_PERMISSION_COUNT:
-    opts:
-      title: Current build's Android permission count
+      title: Source image(s) with icon(s)

@@ -52,13 +52,12 @@ def findAndCustomizeImages(basepath, leftIconPath, rightIconPath):
     if path.isfile(fullPath) and (fullPath.endswith('.png') or fullPath.endswith('.jpg')):
       customizeImage(fullPath, leftIconPath, rightIconPath, fullPath)
 
-if (not sys.argv[1]):
+if (len(sys.argv) < 2) or (not sys.argv[1]):
   print("!! Empty background (first parameter)")
   sys.exit(1)
 
 if len(sys.argv) < 3:
-  print("!! Script required at least 2 parameters (background, leftOverlay, rightOverlay)")
-  print("!! Fill blank string if not needed")
+  print("!! Script required at least 2 parameters (source_image, left_icon and/or right_icon)")
   sys.exit(1)
 
 backgroundPath = sys.argv[1]
@@ -89,8 +88,7 @@ if((len(sys.argv) > 3) and (len(sys.argv[3]))):
     print("!! Path: " + rightIconPath)
     sys.exit(1)
 elif not leftIconPath:
-  print("!! Script required at least 2 parameters (background, leftOverlay, rightOverlay)")
-  print("!! Fill blank strings if not needed, BUT you cannot have 2 empty strings for overlays")
+  print("!! Script required at least 2 parameters (source_image, left_icon and/or right_icon)")
   sys.exit(1)
 else:
   rightIconPath = ""
