@@ -14,8 +14,8 @@ if [ "$left_icon" == "" ] && [ "$right_icon" == "" ]; then
     echo "Error: Please provide at least left or right icon's path"
     exit 1
 fi
-
-python3 generator.py3 "$source_image" "$left_icon" "$right_icon" "$output_path"
+ls
+python3 ./generator.py3 "$source_image" "$left_icon" "$right_icon" "$output_path"
 
 zip "overlayed_images.zip" "$output_path"
 cp "overlayed_images.zip" $BITRISE_DEPLOY_DIR/overlayed_images.zip || true
