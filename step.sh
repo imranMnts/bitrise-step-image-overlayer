@@ -25,5 +25,5 @@ echo "Output path: ${output_path}"
 python3 "$(dirname $0)/generator.py3 "$source_image" "$left_icon" "$right_icon" "$output_path" || error_exit "Python file not found."
 
 zip "overlayed_images.zip" "$output_path"
-cp "overlayed_images.zip" $BITRISE_DEPLOY_DIR/overlayed_images.zip || true
+cp "overlayed_images.zip" "$BITRISE_DEPLOY_DIR/overlayed_images.zip" || true
 exit 0
