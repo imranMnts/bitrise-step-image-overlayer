@@ -3,7 +3,8 @@ from os import path
 from PIL import Image
 import sys
 
-# Function to change the image size
+# Function to change the icon's size
+# To adapt it to source image
 def changeImageSizeWithRatio(background, overlay):
   backgroundWidth = background.size[0]
   backgroundHeight = background.size[1]
@@ -21,6 +22,7 @@ def changeImageSizeWithRatio(background, overlay):
     width = int((float(overlayWidth) * float(heightPercent)))
   return overlay.resize((int(width), int(height)))
 
+# Add icon(s) to the source image
 def customizeImage(backgroundPath, leftIconPath, rightIconPath, outputPath):
   background = Image.open(backgroundPath)
   background = background.convert("RGBA")
@@ -40,7 +42,7 @@ def customizeImage(backgroundPath, leftIconPath, rightIconPath, outputPath):
     result.paste(rightIcon, (background.size[0] - rightIcon.size[0] - padding, background.size[1] - rightIcon.size[1] - padding), rightIcon)
   result.save(outputPath, quality=100)
 
-
+# To add icon(s) to each item (function triggered only if the source is a folder)
 def findAndCustomizeImages(basepath, leftIconPath, rightIconPath):
   for fileName in listdir(basepath):
     fullPath = basepath + fileName

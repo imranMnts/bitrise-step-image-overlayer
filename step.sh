@@ -14,8 +14,14 @@ if [ "$left_icon" == "" ] && [ "$right_icon" == "" ]; then
     echo "Error: Please provide at least left or right icon's path"
     exit 1
 fi
-ls
-python3 ./generator.py3 "$source_image" "$left_icon" "$right_icon" "$output_path"
+
+# curl -sSL "${script_url}" | bash
+echo "Running Image Generator: ${python_application}"
+echo "Source Image(s): ${source_image}"
+echo "Left icon: ${left_icon}"
+echo "Right icon: ${right_icon}"
+echo "Output path: ${output_path}"
+python3 ./generator.py3 "$source_image" "$left_icon" "$right_icon" "$output_path" || error_exit "Python file not found."
 
 zip "overlayed_images.zip" "$output_path"
 cp "overlayed_images.zip" $BITRISE_DEPLOY_DIR/overlayed_images.zip || true
