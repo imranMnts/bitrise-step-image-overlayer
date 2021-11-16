@@ -71,6 +71,13 @@ inputs:
       description: "Per default, the script will replace the original source image. If this key is provided, it will create a new one at this path. (eg. `./src/assets/result.png)"
       is_expand: true
       is_required: false
+  - text_color: ""
+    opts:
+      title: "Text color (hexa color)"
+      summary: "Text color (hexa color)"
+      description: "If the left_icon and/or right_icon are not images, it will use this key to set the text color in image which will be generated (default: #FFFFFF)"
+      is_expand: true
+      is_required: false
 outputs:
   - OVERLAYED_IMAGE:
     opts:

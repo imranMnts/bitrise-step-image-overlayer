@@ -21,6 +21,7 @@ echo "Source Image(s): ${source_image}"
 echo "Left icon: ${left_icon}"
 echo "Right icon: ${right_icon}"
 echo "Output path: ${output_path}"
+echo "Text color: ${text_color}"
 
 pip3 install Pillow
 python3 "$(dirname $0)/generator.py3" "$source_image" "$left_icon" "$right_icon" "$output_path" || error_exit "Python file not found."

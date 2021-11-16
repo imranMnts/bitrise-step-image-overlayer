@@ -1,68 +1,25 @@
 from os import listdir
 from os import path
-from PIL import Image
+from PIL import Image, ImageDraw, ImageFont
 import sys
+from utils.py3 import customizeImage, findAndCustomizeImages
 
-# Function to change the icon's size
-# To adapt it to source image
-def changeImageSizeWithRatio(background, overlay):
-  backgroundWidth = background.size[0]
-  backgroundHeight = background.size[1]
+### >>> INIT <<< ###
 
-  overlayWidth = overlay.size[0]
-  overlayHeight = overlay.size[1]
+leftIcon = None
+rightIcon = None
 
-  if overlayWidth > overlayHeight:
-    width = backgroundWidth/2
-    widthPercent = (width / float(overlayWidth))
-    height = int((float(overlayHeight) * float(widthPercent)))
-  else:
-    height = backgroundHeight/3
-    heightPercent = (height / float(overlayHeight))
-    width = int((float(overlayWidth) * float(heightPercent)))
-  return overlay.resize((int(width), int(height)))
-
-# Add icon(s) to the source image
-def customizeImage(backgroundPath, leftIconPath, rightIconPath, outputPath):
-  background = Image.open(backgroundPath)
-  background = background.convert("RGBA")
-  padding = int(background.size[0] / 20)
-  if (padding > 10):
-    padding = 10
-  result = background.copy()
-  if len(leftIconPath):
-    leftIcon = Image.open(leftIconPath)
-    leftIcon = leftIcon.convert("RGBA")
-    leftIcon = changeImageSizeWithRatio(background, leftIcon)
-    result.paste(leftIcon, (padding, background.size[1] - leftIcon.size[1] - padding), leftIcon)
-  if len(rightIconPath):
-    rightIcon = Image.open(rightIconPath)
-    rightIcon = rightIcon.convert("RGBA")
-    rightIcon = changeImageSizeWithRatio(background, rightIcon)
-    result.paste(rightIcon, (background.size[0] - rightIcon.size[0] - padding, background.size[1] - rightIcon.size[1] - padding), rightIcon)
-  result.save(outputPath, quality=100)
-
-# To add icon(s) to each item (function triggered only if the source is a folder)
-def findAndCustomizeImages(basepath, leftIconPath, rightIconPath):
-  for fileName in listdir(basepath):
-    fullPath = basepath + fileName
-    if not path.exists(fullPath):
-      print("!! Image not found, please check the path )")
-      print("!! Path: " + fullPath)
-      sys.exit(1)
-
-    if path.isfile(fullPath) and (fullPath.endswith('.png') or fullPath.endswith('.jpg')):
-      customizeImage(fullPath, leftIconPath, rightIconPath, fullPath)
+### >>> MAIN <<< ###
 
 if (len(sys.argv) < 2) or (not sys.argv[1]):
   print("!! Empty background (first parameter)")
   sys.exit(1)
-
 if len(sys.argv) < 3:
   print("!! Script required at least 2 parameters (source_image, left_icon and/or right_icon)")
   sys.exit(1)
 
 backgroundPath = sys.argv[1]
+print('backgroundPath : ', backgroundPath)
 if not path.exists(backgroundPath):
   print("!! Background image not found, please check the path )")
   print("!! Path: " + backgroundPath)
@@ -70,32 +27,27 @@ if not path.exists(backgroundPath):
 
 if len(sys.argv) > 4 and len(sys.argv[4]):
   outputPath = sys.argv[4]
-  print('outputPath : ', outputPath)
 else:
   outputPath = backgroundPath
+print('outputPath : ', outputPath)
+
+if len(sys.argv) > 5 and len(sys.argv[5]):
+  textColor = sys.argv[5]
+else:
+  textColor = "#FFFFFF"
+print('textColor : ', textColor)
 
 if(len(sys.argv[2])):
   leftIconPath = sys.argv[2]
-  if not path.exists(leftIconPath):
-    print("!! Left icon not found, please check the path )")
-    print("!! Path: " + leftIconPath)
-    sys.exit(1)
-else:
-  leftIconPath = ""
-
+  print('leftIconPath : ', leftIconPath)
 if((len(sys.argv) > 3) and (len(sys.argv[3]))):
   rightIconPath = sys.argv[3]
-  if not path.exists(rightIconPath):
-    print("!! Right icon not found, please check the path )")
-    print("!! Path: " + rightIconPath)
-    sys.exit(1)
+  print('rightIconPath : ', rightIconPath)
 elif not leftIconPath:
   print("!! Script required at least 2 parameters (source_image, left_icon and/or right_icon)")
   sys.exit(1)
-else:
-  rightIconPath = ""
 
 if path.isfile(backgroundPath):
-  customizeImage(backgroundPath, leftIconPath, rightIconPath, outputPath)
+  customizeImage(backgroundPath, leftIconPath, rightIconPath, outputPath, textColor)
 else:
-  findAndCustomizeImages(backgroundPath, leftIconPath, rightIconPath)
+  findAndCustomizeImages(backgroundPath, leftIconPath, rightIconPath, textColor)
