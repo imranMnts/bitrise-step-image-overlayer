@@ -23,6 +23,8 @@ echo "Right icon: ${right_icon}"
 echo "Output path: ${output_path}"
 echo "Text color: ${text_color}"
 
+echo "Path: $(dirname $0)"
+
 pip3 install Pillow
 python3 "$(dirname $0)/generator.py3" "$source_image" "$left_icon" "$right_icon" "$output_path" "$text_color"
 
