@@ -11,7 +11,7 @@ if [ "$output_path" == "" ]; then
 fi
 
 if [ "$left_icon" == "" ] && [ "$right_icon" == "" ]; then
-    echo "Error: Please provide at least left or right icon's path"
+    echo "Error: Please provide at least left or right icon's path/text"
     exit 1
 fi
 
@@ -23,10 +23,8 @@ echo "Right icon: ${right_icon}"
 echo "Output path: ${output_path}"
 echo "Text color: ${text_color}"
 
-echo "Path: $(dirname $0)"
-
 pip3 install Pillow
-python3 "$(dirname $0)/generator.py3" "$source_image" "$left_icon" "$right_icon" "$output_path" "$text_color"
+python3 "$(dirname $0)/generator.py3" "$(dirname $0)" "$source_image" "$left_icon" "$right_icon" "$output_path" "$text_color"
 
 zip "overlayed_images.zip" "$output_path"
 cp "overlayed_images.zip" "$BITRISE_DEPLOY_DIR/overlayed_images.zip"

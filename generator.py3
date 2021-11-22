@@ -90,11 +90,11 @@ def createAnImageFromText(backgroundPath, text, textColor):
 
   fontsize = 1
   imgFraction = 0.50
-  iconFont = ImageFont.truetype('LatoBold.ttf', fontsize)
+  iconFont = ImageFont.truetype("${stepRootPath}/LatoBold.ttf", fontsize)
   while iconFont.getsize(text)[0] < imgFraction * background.size[0]:
     # iterate until the text size is just larger than the criteria
     fontsize += 1
-    iconFont = ImageFont.truetype('LatoBold.ttf', fontsize)
+    iconFont = ImageFont.truetype("${stepRootPath}/LatoBold.ttf", fontsize)
 
   canvas = ImageDraw.Draw(iconBackground)
   text_width, text_height = canvas.textsize(text, font=iconFont)
@@ -107,40 +107,41 @@ def createAnImageFromText(backgroundPath, text, textColor):
 
 ### >>>> MAIN <<<< ###
 
-if (len(sys.argv) < 2) or (not sys.argv[1]):
+if (len(sys.argv) < 3) or (not sys.argv[2]):
   print("!! Empty background (first parameter)")
   sys.exit(1)
-if len(sys.argv) < 3:
+if len(sys.argv) < 4:
   print("!! Script required at least 2 parameters (source_image, left_icon and/or right_icon)")
   sys.exit(1)
 
 
 print("List Dir: ")
 print(listdir('.'))
-backgroundPath = sys.argv[1]
+stepRootPath = sys.argv[1]
+backgroundPath = sys.argv[2]
 print('backgroundPath : ', backgroundPath)
 if not path.exists(backgroundPath):
   print("!! Background image not found, please check the path )")
   print("!! Path: " + backgroundPath)
   sys.exit(1)
 
-if len(sys.argv) > 4 and len(sys.argv[4]):
-  outputPath = sys.argv[4]
+if len(sys.argv) > 5 and len(sys.argv[5]):
+  outputPath = sys.argv[5]
 else:
   outputPath = backgroundPath
 print('outputPath : ', outputPath)
 
-if len(sys.argv) > 5 and len(sys.argv[5]):
-  textColor = sys.argv[5]
+if len(sys.argv) > 6 and len(sys.argv[6]):
+  textColor = sys.argv[6]
 else:
   textColor = "#FFFFFF"
 print('textColor : ', textColor)
 
-if(len(sys.argv[2])):
-  leftIconPath = sys.argv[2]
+if(len(sys.argv[3])):
+  leftIconPath = sys.argv[3]
   print('leftIconPath : ', leftIconPath)
-if((len(sys.argv) > 3) and (len(sys.argv[3]))):
-  rightIconPath = sys.argv[3]
+if((len(sys.argv) > 4) and (len(sys.argv[4]))):
+  rightIconPath = sys.argv[4]
   print('rightIconPath : ', rightIconPath)
 elif not leftIconPath:
   print("!! Script required at least 2 parameters (source_image, left_icon and/or right_icon)")
