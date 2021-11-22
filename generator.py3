@@ -8,6 +8,10 @@ from PIL import Image, ImageDraw, ImageFont
 leftIcon = None
 rightIcon = None
 
+
+print("List Dir: ")
+print(listdir('.'))
+
 ### >>> FUNCTIONS <<< ###
 
 # Function to change the icon's size
