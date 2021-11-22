@@ -118,6 +118,7 @@ if len(sys.argv) < 4:
 print("List Dir: ")
 print(listdir('.'))
 stepRootPath = sys.argv[1]
+print('stepRootPath : ', stepRootPath)
 backgroundPath = sys.argv[2]
 print('backgroundPath : ', backgroundPath)
 if not path.exists(backgroundPath):
