@@ -90,11 +90,11 @@ def createAnImageFromText(backgroundPath, text, textColor):
 
   fontsize = 1
   imgFraction = 0.50
-  iconFont = ImageFont.truetype('Lato-Bold.ttf', fontsize)
+  iconFont = ImageFont.truetype('LatoBold.ttf', fontsize)
   while iconFont.getsize(text)[0] < imgFraction * background.size[0]:
     # iterate until the text size is just larger than the criteria
     fontsize += 1
-    iconFont = ImageFont.truetype('Lato-Bold.ttf', fontsize)
+    iconFont = ImageFont.truetype('LatoBold.ttf', fontsize)
 
   canvas = ImageDraw.Draw(iconBackground)
   text_width, text_height = canvas.textsize(text, font=iconFont)
