@@ -1,6 +1,6 @@
 from os import path
 import sys
-from . import utils
+from utils import customizeImage, findAndCustomizeImages
 
 ### >>> INIT <<< ###
 
@@ -46,6 +46,6 @@ elif not leftIconPath:
   sys.exit(1)
 
 if path.isfile(backgroundPath):
-  utils.customizeImage(backgroundPath, leftIconPath, rightIconPath, outputPath, textColor)
+  customizeImage(backgroundPath, leftIconPath, rightIconPath, outputPath, textColor)
 else:
-  utils.findAndCustomizeImages(backgroundPath, leftIconPath, rightIconPath, textColor)
+  findAndCustomizeImages(backgroundPath, leftIconPath, rightIconPath, textColor)
