@@ -11,6 +11,8 @@ To give to our step the information about the expected values:
   - You can provide just one image's path, the step will add icons to this one only
   - You can provide a folder's path where we many images, the step will add icons to them
 - Left **and/or** right icons which will be added on the source image
+  - You can provide just one image's path, the step will add it to source image
+  - You can provide a text, this step will convert it to an image and add it to source image
 
 <br/>
 
@@ -26,6 +28,7 @@ The asterisks (*) mean mandatory keys
 |left_icon |String |Left icon's path||
 |right_icon |String |Right icon's path||
 |output_path |String |Output file's path ||
+|textcolor |String |Icon text color ||
 
 <br />
 
