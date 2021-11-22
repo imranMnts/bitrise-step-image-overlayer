@@ -8,10 +8,6 @@ from PIL import Image, ImageDraw, ImageFont
 leftIcon = None
 rightIcon = None
 
-
-print("List Dir: ")
-print(listdir('.'))
-
 ### >>> FUNCTIONS <<< ###
 
 # Function to change the icon's size
@@ -118,6 +114,9 @@ if len(sys.argv) < 3:
   print("!! Script required at least 2 parameters (source_image, left_icon and/or right_icon)")
   sys.exit(1)
 
+
+print("List Dir: ")
+print(listdir('.'))
 backgroundPath = sys.argv[1]
 print('backgroundPath : ', backgroundPath)
 if not path.exists(backgroundPath):
