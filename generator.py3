@@ -1,8 +1,6 @@
-from os import listdir
 from os import path
-from PIL import Image, ImageDraw, ImageFont
 import sys
-from utils.py3 import customizeImage, findAndCustomizeImages
+from . import utils
 
 ### >>> INIT <<< ###
 
@@ -48,6 +46,6 @@ elif not leftIconPath:
   sys.exit(1)
 
 if path.isfile(backgroundPath):
-  customizeImage(backgroundPath, leftIconPath, rightIconPath, outputPath, textColor)
+  utils.customizeImage(backgroundPath, leftIconPath, rightIconPath, outputPath, textColor)
 else:
-  findAndCustomizeImages(backgroundPath, leftIconPath, rightIconPath, textColor)
+  utils.findAndCustomizeImages(backgroundPath, leftIconPath, rightIconPath, textColor)
