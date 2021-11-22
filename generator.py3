@@ -88,6 +88,7 @@ def createAnImageFromText(backgroundPath, text, textColor):
   imgHeight = int(background.size[1]/3)
   iconBackground = Image.new(mode="RGBA", size=(imgWidth, imgHeight), color=(0,0,0,0))
 
+  print('stepRootPath : ', stepRootPath)
   fontsize = 1
   imgFraction = 0.50
   iconFont = ImageFont.truetype("${stepRootPath}/LatoBold.ttf", fontsize)
@@ -118,7 +119,6 @@ if len(sys.argv) < 4:
 print("List Dir: ")
 print(listdir('.'))
 stepRootPath = sys.argv[1]
-print('stepRootPath : ', stepRootPath)
 backgroundPath = sys.argv[2]
 print('backgroundPath : ', backgroundPath)
 if not path.exists(backgroundPath):
