@@ -78,6 +78,16 @@ inputs:
       description: "If the left_icon and/or right_icon are not images, it will use this key to set the text color in image which will be generated (default: #FFFFFF)"
       is_expand: true
       is_required: false
+  - center_icon: "False"
+    opts:
+      title: "If you want center the icoon in the background image"
+      summary: "If you want center the icoon in the background image"
+      description: "If you want center the icoon in the background image"
+      is_expand: true
+      is_required: false
+      value_options:
+        - "True"
+        - "False"
 outputs:
   - OVERLAYED_IMAGE:
     opts:

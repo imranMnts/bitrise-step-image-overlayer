@@ -12,7 +12,7 @@ rightIcon = None
 
 # Function to change the icon's size
 # To adapt it to source image
-def changeImageSizeWithRatio(background, overlay):
+def changeImageSizeWithRatio(background: Image, overlay: Image):
   backgroundWidth = background.size[0]
   backgroundHeight = background.size[1]
 
@@ -30,7 +30,7 @@ def changeImageSizeWithRatio(background, overlay):
   return overlay.resize((int(width), int(height)))
 
 # Add icon(s) to the source image
-def customizeImage(backgroundPath, leftIconPath, rightIconPath, outputPath, textColor):
+def customizeImage(backgroundPath: str, leftIconPath: str, rightIconPath: str, outputPath: str, textColor: str, centerIcon: bool):
   background = Image.open(backgroundPath)
   background = background.convert("RGBA")
   backgroundWidth = background.size[0]
@@ -58,21 +58,43 @@ def customizeImage(backgroundPath, leftIconPath, rightIconPath, outputPath, text
     leftIcon = changeImageSizeWithRatio(background, leftIcon)
     leftIconWidth = leftIcon.size[0]
     leftIconHeight = leftIcon.size[1]
-    x = int((backgroundWidth/2 - leftIconWidth)/2)
-    y = int(backgroundHeight/2 + (backgroundHeight/2 - leftIconHeight)/2)
+    x = getXPosition(backgroundWidth, leftIconWidth, True, centerIcon)
+    y = getYPosition(backgroundHeight, leftIconHeight, centerIcon)
     result.paste(leftIcon, (x, y), leftIcon)
   if rightIcon != None:
     rightIcon = changeImageSizeWithRatio(background, rightIcon)
     rightIconWidth = rightIcon.size[0]
     rightIconHeight = rightIcon.size[1]
-    x = int(backgroundWidth/2 + (backgroundWidth/2 - rightIconWidth)/2)
-    y = int(backgroundHeight/2 + (backgroundHeight/2 - rightIconHeight)/2)
+    x = getXPosition(backgroundWidth, rightIconWidth, False, centerIcon)
+    y = getYPosition(backgroundHeight, rightIconHeight, centerIcon)
     result.paste(rightIcon, (x, y), rightIcon)
   result.save(outputPath, quality=100)
 
+def getXPosition(backgroundWidth: int, iconWidth: int, isLeftIcon: bool, centerIcon: bool):
+  if (isLeftIcon):
+    if (centerIcon):
+      return int(backgroundWidth/ 2 - iconWidth)
+    else:
+      return int((backgroundWidth/ 2 - iconWidth)/ 2)
+  else:
+    if (centerIcon):
+      return int(backgroundWidth/ 2)
+    else:
+      return int(backgroundWidth/ 2 + (backgroundWidth/ 2 - iconWidth) / 2)
+
+def getYPosition(backgroundHeight: int, iconHeight: int, centerIcon: bool):
+  print("centerIcon:")
+  print(centerIcon)
+  if (centerIcon):
+    print("YARRAK:")
+    print(backgroundHeight)
+    return int(backgroundHeight/2)
+  else:
+    return int(backgroundHeight/2 + (backgroundHeight/2 - iconHeight)/2)
+
 
 # To add icon(s) to each item (function triggered only if the source is a folder)
-def findAndCustomizeImages(basepath, leftIconPath, rightIconPath, textColor):
+def findAndCustomizeImages(basepath: str, leftIconPath: str, rightIconPath: str, textColor: str, centerIcon: bool):
   for fileName in listdir(basepath):
     fullPath = basepath + fileName
     if not path.exists(fullPath):
@@ -81,7 +103,7 @@ def findAndCustomizeImages(basepath, leftIconPath, rightIconPath, textColor):
       sys.exit(1)
 
     if path.isfile(fullPath) and (fullPath.endswith('.png') or fullPath.endswith('.jpg') or fullPath.endswith('.jpeg')):
-      customizeImage(fullPath, leftIconPath, rightIconPath, fullPath, textColor)
+      customizeImage(fullPath, leftIconPath, rightIconPath, fullPath, textColor, centerIcon)
 
 
 # Convert the input text to image
@@ -143,6 +165,12 @@ else:
   textColor = "#FFFFFF"
 print('textColor : ', textColor)
 
+if len(sys.argv) > 7 and len(sys.argv[7]):
+  centerIcon = sys.argv[7] == "True"
+else:
+  centerIcon = False
+print('centerIcon : ', centerIcon)
+
 if(len(sys.argv[3])):
   leftIconPath = sys.argv[3]
   print('leftIconPath : ', leftIconPath)
@@ -154,6 +182,6 @@ elif not leftIconPath:
   sys.exit(1)
 
 if path.isfile(backgroundPath):
-  customizeImage(backgroundPath, leftIconPath, rightIconPath, outputPath, textColor)
+  customizeImage(backgroundPath, leftIconPath, rightIconPath, outputPath, textColor, centerIcon)
 else:
-  findAndCustomizeImages(backgroundPath, leftIconPath, rightIconPath, textColor)
+  findAndCustomizeImages(backgroundPath, leftIconPath, rightIconPath, textColor, centerIcon)
