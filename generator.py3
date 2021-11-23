@@ -56,13 +56,18 @@ def customizeImage(backgroundPath, leftIconPath, rightIconPath, outputPath, text
   result = background.copy()
   if leftIcon != None:
     leftIcon = changeImageSizeWithRatio(background, leftIcon)
+    leftIconWidth = leftIcon.size[0]
     leftIconHeight = leftIcon.size[1]
-    result.paste(leftIcon, (padding, backgroundHeight - leftIconHeight - padding), leftIcon)
+    x = int((backgroundWidth/2 - leftIconWidth)/2)
+    y = int(backgroundHeight/2 + (backgroundHeight/2 - leftIconHeight)/2)
+    result.paste(leftIcon, (x, y), leftIcon)
   if rightIcon != None:
     rightIcon = changeImageSizeWithRatio(background, rightIcon)
     rightIconWidth = rightIcon.size[0]
     rightIconHeight = rightIcon.size[1]
-    result.paste(rightIcon, (backgroundWidth - rightIconWidth - padding, backgroundHeight - rightIconHeight - padding), rightIcon)
+    x = int(backgroundWidth/2 + (backgroundWidth/2 - rightIconWidth)/2)
+    y = int(backgroundHeight/2 + (backgroundHeight/2 - rightIconHeight)/2)
+    result.paste(rightIcon, (x, y), rightIcon)
   result.save(outputPath, quality=100)
 
 
@@ -84,14 +89,15 @@ def createAnImageFromText(backgroundPath, text, textColor):
   background = Image.open(backgroundPath)
   background = background.convert("RGBA")
 
-  imgWidth = int(background.size[0]/2)
-  imgHeight = int(background.size[1]/3)
+  imgFraction = 0.45
+  imgWidth = int(background.size[0] * imgFraction)
+  imgHeight = int(background.size[1] * imgFraction)
   iconBackground = Image.new(mode="RGBA", size=(imgWidth, imgHeight), color=(0,0,0,0))
 
   fontsize = 1
-  imgFraction = 0.50
+  txtFraction = imgFraction - 0.02
   iconFont = ImageFont.truetype(stepRootPath + "/Lato-Bold.ttf", fontsize)
-  while iconFont.getsize(text)[0] < imgFraction * background.size[0]:
+  while iconFont.getsize(text)[0] < txtFraction * background.size[0]:
     # iterate until the text size is just larger than the criteria
     fontsize += 1
     iconFont = ImageFont.truetype(stepRootPath + "/Lato-Bold.ttf", fontsize)
