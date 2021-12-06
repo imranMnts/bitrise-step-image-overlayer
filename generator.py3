@@ -5,26 +5,34 @@ from PIL import Image, ImageDraw, ImageFont
 
 ### >>> INIT <<< ###
 
-leftIcon = None
-rightIcon = None
+class Variables(object):
+  textContainerHeight = 0
+  leftIcon = None
+  rightIcon = None
+  imgFraction = 0.5
 
 ### >>> FUNCTIONS <<< ###
 
 # Function to change the icon's size
 # To adapt it to source image
-def changeImageSizeWithRatio(background: Image, overlay: Image):
+def changeImageSizeWithRatio(background: Image, overlay: Image, isLeftIcon: bool):
   backgroundWidth = background.size[0]
   backgroundHeight = background.size[1]
 
   overlayWidth = overlay.size[0]
   overlayHeight = overlay.size[1]
 
+  if (isLeftIcon):
+    fraction = Variables.imgFraction
+  else:
+    fraction = 0.33
+
   if overlayWidth > overlayHeight:
-    width = backgroundWidth/2
+    width = backgroundWidth * fraction
     widthPercent = (width / float(overlayWidth))
     height = int((float(overlayHeight) * float(widthPercent)))
   else:
-    height = backgroundHeight/3
+    height = backgroundHeight * fraction
     heightPercent = (height / float(overlayHeight))
     width = int((float(overlayWidth) * float(heightPercent)))
   return overlay.resize((int(width), int(height)))
@@ -37,60 +45,38 @@ def customizeImage(backgroundPath: str, leftIconPath: str, rightIconPath: str, o
   backgroundHeight = background.size[1]
 
   if path.exists(leftIconPath):
-    leftIcon = Image.open(leftIconPath)
-    leftIcon = leftIcon.convert("RGBA")
+    Variables.leftIcon = Image.open(leftIconPath)
+    Variables.leftIcon = Variables.leftIcon.convert("RGBA")
   else:
-    leftIcon = createAnImageFromText(backgroundPath, leftIconPath, textColor)
-    leftIcon = leftIcon.convert("RGBA")
+    Variables.leftIcon = createAnImageFromText(backgroundPath, leftIconPath, textColor, centerIcon)
+    Variables.leftIcon = Variables.leftIcon.convert("RGBA")
 
   if path.exists(rightIconPath):
-    rightIcon = Image.open(rightIconPath)
-    rightIcon = rightIcon.convert("RGBA")
+    Variables.rightIcon = Image.open(rightIconPath)
+    Variables.rightIcon = Variables.rightIcon.convert("RGBA")
   else:
-    rightIcon = createAnImageFromText(backgroundPath, rightIconPath, textColor)
-    rightIcon = rightIcon.convert("RGBA")
+    Variables.rightIcon = createAnImageFromText(backgroundPath, rightIconPath, textColor, centerIcon)
+    Variables.rightIcon = Variables.rightIcon.convert("RGBA")
 
   padding = int(background.size[0] / 20)
   if (padding > 5):
     padding = 5
   result = background.copy()
-  if leftIcon != None:
-    leftIcon = changeImageSizeWithRatio(background, leftIcon)
-    leftIconWidth = leftIcon.size[0]
-    leftIconHeight = leftIcon.size[1]
+  if Variables.leftIcon != None:
+    Variables.leftIcon = changeImageSizeWithRatio(background, Variables.leftIcon, True)
+    leftIconWidth = Variables.leftIcon.size[0]
+    leftIconHeight = Variables.leftIcon.size[1]
     x = getXPosition(backgroundWidth, leftIconWidth, True, centerIcon)
-    y = getYPosition(backgroundHeight, leftIconHeight, centerIcon)
-    result.paste(leftIcon, (x, y), leftIcon)
-  if rightIcon != None:
-    rightIcon = changeImageSizeWithRatio(background, rightIcon)
-    rightIconWidth = rightIcon.size[0]
-    rightIconHeight = rightIcon.size[1]
+    y = getYPosition(backgroundHeight, leftIconHeight, True, centerIcon)
+    result.paste(Variables.leftIcon, (x, y), Variables.leftIcon)
+  if Variables.rightIcon != None:
+    Variables.rightIcon = changeImageSizeWithRatio(background, Variables.rightIcon, False)
+    rightIconWidth = Variables.rightIcon.size[0]
+    rightIconHeight = Variables.rightIcon.size[1]
     x = getXPosition(backgroundWidth, rightIconWidth, False, centerIcon)
-    y = getYPosition(backgroundHeight, rightIconHeight, centerIcon)
-    result.paste(rightIcon, (x, y), rightIcon)
+    y = getYPosition(backgroundHeight, rightIconHeight, False, centerIcon)
+    result.paste(Variables.rightIcon, (x, y), Variables.rightIcon)
   result.save(outputPath, quality=100)
-
-def getXPosition(backgroundWidth: int, iconWidth: int, isLeftIcon: bool, centerIcon: bool):
-  if (isLeftIcon):
-    if (centerIcon):
-      return int(backgroundWidth/ 2 - iconWidth)
-    else:
-      return int((backgroundWidth/ 2 - iconWidth)/ 2)
-  else:
-    if (centerIcon):
-      return int(backgroundWidth/ 2)
-    else:
-      return int(backgroundWidth/ 2 + (backgroundWidth/ 2 - iconWidth) / 2)
-
-def getYPosition(backgroundHeight: int, iconHeight: int, centerIcon: bool):
-  print("centerIcon:")
-  print(centerIcon)
-  if (centerIcon):
-    print("YARRAK:")
-    print(backgroundHeight)
-    return int(backgroundHeight/2)
-  else:
-    return int(backgroundHeight/2 + (backgroundHeight/2 - iconHeight)/2)
 
 
 # To add icon(s) to each item (function triggered only if the source is a folder)
@@ -107,30 +93,64 @@ def findAndCustomizeImages(basepath: str, leftIconPath: str, rightIconPath: str,
 
 
 # Convert the input text to image
-def createAnImageFromText(backgroundPath, text, textColor):
+def createAnImageFromText(backgroundPath: str, text: str, textColor: str, centerIcon: bool):
   background = Image.open(backgroundPath)
   background = background.convert("RGBA")
 
-  imgFraction = 0.45
-  imgWidth = int(background.size[0] * imgFraction)
-  imgHeight = int(background.size[1] * imgFraction)
-  iconBackground = Image.new(mode="RGBA", size=(imgWidth, imgHeight), color=(0,0,0,0))
-
   fontsize = 1
-  txtFraction = imgFraction - 0.02
+  txtFraction = Variables.imgFraction - 0.02
   iconFont = ImageFont.truetype(stepRootPath + "/Lato-Bold.ttf", fontsize)
-  while iconFont.getsize(text)[0] < txtFraction * background.size[0]:
+  while iconFont.getsize(text)[0] < (txtFraction * background.size[0]):
     # iterate until the text size is just larger than the criteria
     fontsize += 1
     iconFont = ImageFont.truetype(stepRootPath + "/Lato-Bold.ttf", fontsize)
 
-  canvas = ImageDraw.Draw(iconBackground)
-  text_width, text_height = canvas.textsize(text, font=iconFont)
-  x_pos = int((imgWidth - text_width) / 2)
-  y_pos = int((imgHeight - text_height) / 2)
+  Variables.textContainerHeight = iconFont.getsize(text)[1]
 
-  canvas.text((x_pos, y_pos), text, font=iconFont, fill=textColor)
+  if (centerIcon):
+    color=(192, 192, 192, 120)
+    txtImageWidth = int(background.size[0] * Variables.imgFraction)
+    txtImageHeight = int(background.size[1] * Variables.imgFraction)
+  else:
+    color=(0, 0, 0, 0)
+    txtImageWidth = iconFont.getsize(text)[0]
+    txtImageHeight = iconFont.getsize(text)[1]
+
+  iconBackground = Image.new(mode="RGBA", size=(txtImageWidth, txtImageHeight), color=color)
+
+  textContainer = ImageDraw.Draw(iconBackground)
+  text_width, text_height = textContainer.textsize(text, font=iconFont)
+  x_pos = int((txtImageWidth - text_width)/2)
+  y_pos = int((txtImageHeight - text_height)/2)
+
+  textContainer.text((x_pos, y_pos), text, font=iconFont, fill=textColor)
   return iconBackground
+
+# Helpers
+def getXPosition(backgroundWidth: int, iconWidth: int, isLeftIcon: bool, centerIcon: bool):
+  if (isLeftIcon):
+    if (centerIcon):
+      return int(backgroundWidth/ 2 - iconWidth/ 2)
+    else:
+      return int((backgroundWidth/ 2 - iconWidth)/ 2)
+  else:
+    if (centerIcon):
+      return int(backgroundWidth/ 2)
+    else:
+      return int(backgroundWidth/ 2 + (backgroundWidth/ 2 - iconWidth) / 2)
+
+def getYPosition(backgroundHeight: int, iconHeight: int, isLeftIcon: bool, centerIcon: bool):
+  if (centerIcon):
+    if (isLeftIcon):
+      return int(backgroundHeight/2 - iconHeight/ 2)
+    else:
+      if path.exists(leftIconPath):
+        return int(backgroundHeight/2)
+      else:
+        # if we display a text, to not hide it
+        return int(backgroundHeight/2 + Variables.textContainerHeight/ 2)
+  else:
+    return int(backgroundHeight - iconHeight - backgroundHeight/10)
 
 
 ### >>>> MAIN <<<< ###
@@ -170,6 +190,8 @@ if len(sys.argv) > 7 and len(sys.argv[7]):
 else:
   centerIcon = False
 print('centerIcon : ', centerIcon)
+if (centerIcon):
+  Variables.imgFraction = 0.6
 
 if(len(sys.argv[3])):
   leftIconPath = sys.argv[3]
