@@ -93,11 +93,13 @@ def findAndCustomizeImages(basepath: str, leftIconPath: str, rightIconPath: str,
 def createAnImageFromText(backgroundPath: str, text: str, textColor: str, centerIcon: bool):
   background = Image.open(backgroundPath)
   background = background.convert("RGBA")
+  backgroundWidth = background.size[0]
+  backgroundHeight = background.size[1]
 
   fontsize = 1
   txtFraction = Variables.imgFraction - 0.02
   iconFont = ImageFont.truetype(stepRootPath + "/Arial-Bold.ttf", fontsize)
-  while iconFont.getsize(text)[0] < (txtFraction * background.size[0]):
+  while iconFont.getsize(text)[0] < (txtFraction * backgroundWidth):
     # iterate until the text size is just larger than the criteria
     fontsize += 1
     iconFont = ImageFont.truetype(stepRootPath + "/Arial-Bold.ttf", fontsize)
@@ -106,8 +108,8 @@ def createAnImageFromText(backgroundPath: str, text: str, textColor: str, center
 
   if (centerIcon):
     iconBackgroundColor=(192, 192, 192, 120)
-    txtImageWidth = int(background.size[0] * Variables.imgFraction)
-    txtImageHeight = int(Variables.textContainerHeight + Variables.textContainerHeight/20)
+    txtImageWidth = backgroundWidth
+    txtImageHeight = backgroundHeight
   else:
     iconBackgroundColor=(0, 0, 0, 0)
     txtImageWidth = iconFont.getsize(text)[0]
@@ -116,22 +118,23 @@ def createAnImageFromText(backgroundPath: str, text: str, textColor: str, center
   iconBackground = Image.new(mode="RGBA", size=(txtImageWidth, txtImageHeight), color=iconBackgroundColor)
 
   textContainer = ImageDraw.Draw(iconBackground)
-  text_width, text_height = textContainer.textsize(text, font=iconFont)
-  x_pos = int((txtImageWidth - text_width)/2)
-  y_pos = int((txtImageHeight - text_height)/2)
+  # text_width, text_height = textContainer.textsize(text, font=iconFont)
+  
+  x_pos = int((txtImageWidth - iconFont.getsize(text)[0])/2)
+  y_pos = int((txtImageHeight - iconFont.getsize(text)[1])/2)
 
   textContainer.text((x_pos, y_pos), text, font=iconFont, fill=textColor)
   return iconBackground
 
 # Helpers
 def getXPosition(backgroundWidth: int, iconWidth: int, isLeftIcon: bool, centerIcon: bool):
-  if (isLeftIcon):
+  if (isLeftIcon == True):
     if (centerIcon):
       return int(backgroundWidth/ 2 - iconWidth/ 2)
     else:
       return int((backgroundWidth/ 2 - iconWidth)/ 2)
   else:
-    if (centerIcon):
+    if (centerIcon == True):
       return int(backgroundWidth/ 2)
     else:
       return int(backgroundWidth/ 2 + (backgroundWidth/ 2 - iconWidth) / 2)
