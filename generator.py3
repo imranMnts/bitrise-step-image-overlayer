@@ -58,9 +58,6 @@ def customizeImage(backgroundPath: str, leftIconPath: str, rightIconPath: str, o
     Variables.rightIcon = createAnImageFromText(backgroundPath, rightIconPath, textColor, centerIcon)
     Variables.rightIcon = Variables.rightIcon.convert("RGBA")
 
-  padding = int(background.size[0] / 20)
-  if (padding > 5):
-    padding = 5
   result = background.copy()
   if Variables.leftIcon != None:
     Variables.leftIcon = changeImageSizeWithRatio(background, Variables.leftIcon, True)
@@ -99,18 +96,18 @@ def createAnImageFromText(backgroundPath: str, text: str, textColor: str, center
 
   fontsize = 1
   txtFraction = Variables.imgFraction - 0.02
-  iconFont = ImageFont.truetype(stepRootPath + "/Lato-Bold.ttf", fontsize)
+  iconFont = ImageFont.truetype(stepRootPath + "/Arial-Bold.ttf", fontsize)
   while iconFont.getsize(text)[0] < (txtFraction * background.size[0]):
     # iterate until the text size is just larger than the criteria
     fontsize += 1
-    iconFont = ImageFont.truetype(stepRootPath + "/Lato-Bold.ttf", fontsize)
+    iconFont = ImageFont.truetype(stepRootPath + "/Arial-Bold.ttf", fontsize)
 
   Variables.textContainerHeight = iconFont.getsize(text)[1]
 
   if (centerIcon):
     iconBackgroundColor=(192, 192, 192, 120)
     txtImageWidth = int(background.size[0] * Variables.imgFraction)
-    txtImageHeight = int(Variables.textContainerHeight + Variables.textContainerHeight/10)
+    txtImageHeight = int(Variables.textContainerHeight + Variables.textContainerHeight/20)
   else:
     iconBackgroundColor=(0, 0, 0, 0)
     txtImageWidth = iconFont.getsize(text)[0]
