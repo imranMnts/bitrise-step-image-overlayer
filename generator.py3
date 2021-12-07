@@ -108,15 +108,15 @@ def createAnImageFromText(backgroundPath: str, text: str, textColor: str, center
   Variables.textContainerHeight = iconFont.getsize(text)[1]
 
   if (centerIcon):
-    color=(192, 192, 192, 120)
+    iconBackgroundColor=(192, 192, 192, 120)
     txtImageWidth = int(background.size[0] * Variables.imgFraction)
-    txtImageHeight = int(background.size[1] * Variables.imgFraction)
+    txtImageHeight = int(Variables.textContainerHeight + Variables.textContainerHeight/10)
   else:
-    color=(0, 0, 0, 0)
+    iconBackgroundColor=(0, 0, 0, 0)
     txtImageWidth = iconFont.getsize(text)[0]
-    txtImageHeight = iconFont.getsize(text)[1]
+    txtImageHeight = Variables.textContainerHeight
 
-  iconBackground = Image.new(mode="RGBA", size=(txtImageWidth, txtImageHeight), color=color)
+  iconBackground = Image.new(mode="RGBA", size=(txtImageWidth, txtImageHeight), color=iconBackgroundColor)
 
   textContainer = ImageDraw.Draw(iconBackground)
   text_width, text_height = textContainer.textsize(text, font=iconFont)
@@ -148,7 +148,7 @@ def getYPosition(backgroundHeight: int, iconHeight: int, isLeftIcon: bool, cente
         return int(backgroundHeight/2)
       else:
         # if we display a text, to not hide it
-        return int(backgroundHeight/2 + Variables.textContainerHeight/ 2)
+        return int(backgroundHeight/2 + (int(Variables.textContainerHeight * Variables.imgFraction))/ 2)
   else:
     return int(backgroundHeight - iconHeight - backgroundHeight/10)
 
