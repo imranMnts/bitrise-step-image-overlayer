@@ -27,8 +27,9 @@ The asterisks (*) mean mandatory keys
 |source_image* |String |Source image or folder path||
 |left_icon |String |Left icon's path||
 |right_icon |String |Right icon's path||
-|output_path |String |Output file's path ||
+|output_path |String |Output file's path|source_image|
 |textcolor |String |Icon text color ||
+|center_icon |String |Center icon |False|
 
 <br />
 
