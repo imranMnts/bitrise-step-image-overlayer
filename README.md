@@ -42,23 +42,23 @@ The asterisks (*) mean mandatory keys
 
 ## Example
 
-Config:
-source: `assets/source.png`
-right_icon: `assets/gem.png`
+Config:<br/>
+source: `assets/source.png`<br/>
+right_icon: `assets/gem.png`<br/>
 <img align="center" src="assets/demo.png" width="600" height="442" >
 
-Config:
-source: `assets/source.png`
-left_icon: `assets/fire.png`
-right_icon: `assets/gem.png`
+Config:<br/>
+source: `assets/source.png`<br/>
+left_icon: `assets/fire.png`<br/>
+right_icon: `assets/gem.png`<br/>
 <img align="center" src="assets/demo_2.png" width="600" height="442" >
 
-Config:
-source: `assets/source.png`
-left_icon: `PRODLIKE`
-right_icon: `assets/gem.png`
-center_icon: `True`
-text_color: `#FFFFFF`
+Config:<br/>
+source: `assets/source.png`<br/>
+left_icon: `PRODLIKE`<br/>
+right_icon: `assets/gem.png`<br/>
+center_icon: `True`<br/>
+text_color: `#FFFFFF`<br/>
 <img align="center" src="assets/demo_3.png" width="600" height="442" >
 
 <br />
