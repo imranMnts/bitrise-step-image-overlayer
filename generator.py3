@@ -15,15 +15,15 @@ class Variables(object):
 
 # Function to change the icon's size
 # To adapt it to source image
-def changeImageSizeWithRatio(background: Image, overlay: Image, isLeftIcon: bool):
+def changeImageSizeWithRatio(background: Image, overlay: Image, isLeftIcon: bool, centerIcon: bool):
   backgroundWidth = background.size[0]
   backgroundHeight = background.size[1]
 
   overlayWidth = overlay.size[0]
   overlayHeight = overlay.size[1]
 
-  if (isLeftIcon):
-    fraction = Variables.imgFraction
+  if (isLeftIcon and centerIcon):
+    fraction = 1
   else:
     fraction = 0.33
 
@@ -60,14 +60,14 @@ def customizeImage(backgroundPath: str, leftIconPath: str, rightIconPath: str, o
 
   result = background.copy()
   if Variables.leftIcon != None:
-    Variables.leftIcon = changeImageSizeWithRatio(background, Variables.leftIcon, True)
+    Variables.leftIcon = changeImageSizeWithRatio(background, Variables.leftIcon, True, centerIcon)
     leftIconWidth = Variables.leftIcon.size[0]
     leftIconHeight = Variables.leftIcon.size[1]
     x = getXPosition(backgroundWidth, leftIconWidth, True, centerIcon)
     y = getYPosition(backgroundHeight, leftIconHeight, True, centerIcon)
     result.paste(Variables.leftIcon, (x, y), Variables.leftIcon)
   if Variables.rightIcon != None:
-    Variables.rightIcon = changeImageSizeWithRatio(background, Variables.rightIcon, False)
+    Variables.rightIcon = changeImageSizeWithRatio(background, Variables.rightIcon, False, centerIcon)
     rightIconWidth = Variables.rightIcon.size[0]
     rightIconHeight = Variables.rightIcon.size[1]
     x = getXPosition(backgroundWidth, rightIconWidth, False, centerIcon)
