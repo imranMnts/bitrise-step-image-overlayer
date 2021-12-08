@@ -80,9 +80,9 @@ inputs:
       is_required: false
   - center_icon: "False"
     opts:
-      title: "If you want center the icoon in the background image"
+      title: "If you want center the icon in the background image"
       summary: "If you want center the icoon in the background image"
-      description: "If you want center the icoon in the background image"
+      description: "If the value is true, the step will add a mask on full source image and center the left_icon at the middle of source image and the right_icon at the bottom right of the left_icon"
       is_expand: true
       is_required: false
       value_options:
