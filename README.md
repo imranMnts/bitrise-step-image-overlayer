@@ -42,6 +42,23 @@ The asterisks (*) mean mandatory keys
 
 ## Example
 
+Config:
+source: `assets/source.png`
+right_icon: `assets/gem.png`
 <img align="center" src="assets/demo.png" width="600" height="442" >
+
+Config:
+source: `assets/source.png`
+left_icon: `assets/fire.png`
+right_icon: `assets/gem.png`
+<img align="center" src="assets/demo_2.png" width="600" height="442" >
+
+Config:
+source: `assets/source.png`
+left_icon: `PRODLIKE`
+right_icon: `assets/gem.png`
+center_icon: `True`
+text_color: `#FFFFFF`
+<img align="center" src="assets/demo_3.png" width="600" height="442" >
 
 <br />
