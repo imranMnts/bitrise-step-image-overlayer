@@ -120,6 +120,7 @@ def createAnImageFromText(backgroundPath: str, text: str, textColor: str, center
   textContainer = ImageDraw.Draw(iconBackground)
   # text_width, text_height = textContainer.textsize(text, font=iconFont)
   
+  # center texte in container
   x_pos = int((txtImageWidth - iconFont.getsize(text)[0])/2)
   y_pos = int((txtImageHeight - iconFont.getsize(text)[1])/2)
 
@@ -162,9 +163,6 @@ if len(sys.argv) < 4:
   print("!! Script required at least 2 parameters (source_image, left_icon and/or right_icon)")
   sys.exit(1)
 
-
-print("List Dir: ")
-print(listdir('.'))
 stepRootPath = sys.argv[1]
 backgroundPath = sys.argv[2]
 print('backgroundPath : ', backgroundPath)

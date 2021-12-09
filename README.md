@@ -33,12 +33,6 @@ The asterisks (*) mean mandatory keys
 
 <br />
 
-## Outputs
-
-|Key             |Value type    |Description
-|----------------|-------------|--------------|
-|OVERLAYED_IMAGE_PATH |String |Source image(s)' path with icon(s)|
-
 <br />
 
 ## Example

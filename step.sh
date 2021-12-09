@@ -21,6 +21,6 @@ echo "Running Image Generator"
 pip3 install Pillow
 python3 "$(dirname $0)/generator.py3" "$(dirname $0)" "$source_image" "$left_icon" "$right_icon" "$output_path" "$text_color" "$center_icon"
 
-zip "overlayed_images.zip" "$output_path"
-cp "overlayed_images.zip" "$BITRISE_DEPLOY_DIR/overlayed_images.zip"
+zip "$output_path.zip" "$output_path/*"
+cp "$output_path.zip" "$BITRISE_DEPLOY_DIR/$output_path.zip"
 exit 0
