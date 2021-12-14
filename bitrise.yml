@@ -1,12 +1,12 @@
 format_version: 4
-default_step_lib_source: https://github.com/imranMnts/bitrise-steplib.git
+default_step_lib_source: https://github.com/odemolliens/bitrise-steplib.git
 
 app:
   envs:
   - BITRISE_STEP_ID: image-overlayer
-  - BITRISE_STEP_VERSION: 1.0.1
-  - BITRISE_STEP_GIT_CLONE_URL: https://github.com/imranMnts/bitrise-step-image-overlayer.git
-  - MY_STEPLIB_REPO_FORK_GIT_URL: https://github.com/imranMnts/bitrise-steplib
+  - BITRISE_STEP_VERSION: 1.0.2
+  - BITRISE_STEP_GIT_CLONE_URL: https://github.com/odemolliens/bitrise-step-image-overlayer.git
+  - MY_STEPLIB_REPO_FORK_GIT_URL: https://github.com/odemolliens/bitrise-steplib
 workflows:
   test:
     before_run:
