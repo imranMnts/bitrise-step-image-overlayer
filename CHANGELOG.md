@@ -1,3 +1,3 @@
-## Changelog (Current version: 1.0.0)
+## Changelog (Current version: 1.0.1)
 
 -----------------

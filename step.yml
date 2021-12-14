@@ -22,9 +22,9 @@ description: |
     - You can provide a folder's path where we many images, the step will add icons to them
   - Left **and/or** right icons which will be added on the source image
 
-website: https://github.com/imranMnts/bitrise-step-image-overlayer
-source_code_url: https://github.com/imranMnts/bitrise-step-image-overlayer
-support_url: https://github.com/imranMnts/bitrise-step-image-overlayer/issues
+website: https://github.com/odemolliens/bitrise-step-image-overlayer
+source_code_url: https://github.com/odemolliens/bitrise-step-image-overlayer
+support_url: https://github.com/odemolliens/bitrise-step-image-overlayer/issues
 host_os_tags:
   - osx-10.10
   - ubuntu-16.04
@@ -54,9 +54,6 @@ inputs:
       description: "The path of the icon which will be added on the left side of the source image(s) (eg. `./src/assets/left_icon.png)"
       is_expand: true
       is_required: false
-      value_options:
-        - "yes"
-        - "no"
   - right_icon: ""
     opts:
       title: "Right icon's path"
