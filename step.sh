@@ -1,6 +1,5 @@
 #!/bin/bash
 set -ex
-source_image="yerak/yerak2.yolo/"
 
 if [ "$source_image" == "" ]; then
     echo "Error: Please provide the source image's path"
