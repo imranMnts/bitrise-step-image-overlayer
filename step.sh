@@ -23,7 +23,7 @@ python3 "$(dirname $0)/generator.py3" "$(dirname $0)" "$source_image" "$left_ico
 
 if [ "${output_path: -1}" == "/" ]; then
     output_path_without_slash=${output_path%?}
-    zip "$output_path_without_slash.zip" "$output_path"
+    zip "$output_path_without_slash.zip" "$output_path*"
 
     output_name=$(basename $output_path_without_slash)
     cp "$output_path_without_slash.zip" "$BITRISE_DEPLOY_DIR/$output_name.zip"
