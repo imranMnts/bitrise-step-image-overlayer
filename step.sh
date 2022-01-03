@@ -25,7 +25,7 @@ if [ "${output_path: -1}" == "/" ]; then
     output_path_without_slash=${output_path%?}
     output_name=$(basename $output_path_without_slash)
 
-    zip "$output_name.zip" "$output_path*"
+    zip -r "$output_name.zip" "$output_path"
     cp "$output_name.zip" "$BITRISE_DEPLOY_DIR/$output_name.zip"
 else
     cp "$output_path" "$BITRISE_DEPLOY_DIR/$output_path"
