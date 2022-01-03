@@ -21,6 +21,11 @@ echo "Running Image Generator"
 pip3 install Pillow
 python3 "$(dirname $0)/generator.py3" "$(dirname $0)" "$source_image" "$left_icon" "$right_icon" "$output_path" "$text_color" "$center_icon"
 
-zip "$output_path.zip" "$output_path/*"
-cp "$output_path.zip" "$BITRISE_DEPLOY_DIR/$output_path.zip"
+if [ "${output_path: -1}" == "/" ]; then
+    output_path_without_slash=${output_path%?}
+    zip "$output_path_without_slash.zip" "$output_path"
+    cp "$output_path.zip" "$BITRISE_DEPLOY_DIR/$output_path.zip"
+else
+    cp "$output_path" "$BITRISE_DEPLOY_DIR/$output_path"
+fi
 exit 0
