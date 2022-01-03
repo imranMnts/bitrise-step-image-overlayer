@@ -1,5 +1,6 @@
 #!/bin/bash
 set -ex
+source_image="yerak/yerak2.yolo/"
 
 if [ "$source_image" == "" ]; then
     echo "Error: Please provide the source image's path"
@@ -24,7 +25,7 @@ python3 "$(dirname $0)/generator.py3" "$(dirname $0)" "$source_image" "$left_ico
 if [ "${output_path: -1}" == "/" ]; then
     output_path_without_slash=${output_path%?}
     zip "$output_path_without_slash.zip" "$output_path"
-    cp "$output_path.zip" "$BITRISE_DEPLOY_DIR/$output_path.zip"
+    cp "$output_path_without_slash.zip" "$BITRISE_DEPLOY_DIR/$output_path_without_slash.zip"
 else
     cp "$output_path" "$BITRISE_DEPLOY_DIR/$output_path"
 fi
