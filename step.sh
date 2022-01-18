@@ -23,7 +23,14 @@ python3 "$(dirname $0)/generator.py3" "$(dirname $0)" "$source_image" "$left_ico
 
 mkdir "image_overlayer_results" || true
 
-cp -r "$output_path" "image_overlayer_results"
+if [ "${output_path: -1}" == "/" ]; then
+    output_path_without_slash=${output_path%?}
+    output_name=$(basename $output_path_without_slash)
+
+    cp -r "$output_path_without_slash" "image_overlayer_results"
+else
+    cp -r "$output_path" "image_overlayer_results"
+fi
 
 if [ "$export_results" == "True" ]; then
     if [ "$archive_result" == "True" ]; then
