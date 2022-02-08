@@ -85,7 +85,7 @@ inputs:
       value_options:
         - "True"
         - "False"
-  - archive_result: "False"
+  - archive_result: "True"
     opts:
       title: "If you want archive assets at the end"
       summary: "If you want archive assets at the end"
@@ -95,7 +95,7 @@ inputs:
       value_options:
         - "True"
         - "False"
-  - export_results: "False"
+  - export_results: "True"
     opts:
       title: "If you want export assets at the end"
       summary: "If you want export assets at the end"
