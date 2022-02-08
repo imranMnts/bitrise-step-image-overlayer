@@ -1,13 +1,9 @@
 #!/bin/bash
-set -ex
+set -e
 
 if [ "$source_image" == "" ]; then
     echo "Error: Please provide the source image's path"
     exit 1
-fi
-
-if [ "$output_path" == "" ]; then
-    output_path="$source_image"
 fi
 
 if [ "$left_icon" == "" ] && [ "$right_icon" == "" ]; then
@@ -19,17 +15,43 @@ fi
 echo "Running Image Generator"
 
 pip3 install Pillow
-python3 "$(dirname $0)/generator.py3" "$(dirname $0)" "$source_image" "$left_icon" "$right_icon" "$output_path" "$text_color" "$center_icon"
 
-mkdir "image_overlayer_results" || true
+if [[ "$source_image" == *","* ]]; then
+    IFS=', ' read -r -a sources <<< "$source_image"
+    for element in "${sources[@]}"
+    do
+        output_path="$element"
+        python3 "$(dirname $0)/generator.py3" "$(dirname $0)" "$element" "$left_icon" "$right_icon" "$output_path" "$text_color" "$center_icon"
 
-if [ "${output_path: -1}" == "/" ]; then
-    output_path_without_slash=${output_path%?}
-    output_name=$(basename $output_path_without_slash)
+        mkdir "image_overlayer_results" || true
 
-    cp -r "$output_path_without_slash" "image_overlayer_results"
+        if [ "${output_path: -1}" == "/" ]; then
+            output_path_without_slash=${output_path%?}
+            output_name=$(basename $output_path_without_slash)
+
+            cp -r "$output_path_without_slash" "image_overlayer_results"
+        else
+            cp -r "$output_path" "image_overlayer_results"
+        fi
+    done
+
 else
-    cp -r "$output_path" "image_overlayer_results"
+    if [ "$output_path" == "" ]; then
+        output_path="$source_image"
+    fi
+
+    python3 "$(dirname $0)/generator.py3" "$(dirname $0)" "$source_image" "$left_icon" "$right_icon" "$output_path" "$text_color" "$center_icon"
+
+    mkdir "image_overlayer_results" || true
+
+    if [ "${output_path: -1}" == "/" ]; then
+        output_path_without_slash=${output_path%?}
+        output_name=$(basename $output_path_without_slash)
+
+        cp -r "$output_path_without_slash" "image_overlayer_results"
+    else
+        cp -r "$output_path" "image_overlayer_results"
+    fi
 fi
 
 if [ "$export_results" == "True" ]; then

@@ -10,6 +10,9 @@ To give to our step the information about the expected values:
 - Provide the source image's (or folder's) **path**, where we have the image or list of images on which we will add the icon(s)
   - You can provide just one image's path, the step will add icons to this one only
   - You can provide a folder's path where we many images, the step will add icons to them
+    - We can provide a list of folder, just need to split them with a `,`
+      - Example for one folder: `./assets/mdpi/`
+      - Example for multiple folders: `./assets/ldpi/, ./assets/mdpi/, ./assets/hdpi/`
 - Left **and/or** right icons which will be added on the source image
   - You can provide just one image's path, the step will add it to source image
   - You can provide a text, this step will convert it to an image and add it to source image
@@ -24,7 +27,7 @@ The asterisks (*) mean mandatory keys
 
 |Key             |Value type                     |Description    |Default value        
 |----------------|-------------|--------------|--------------|
-|source_image* |String |Source image or folder path||
+|source_image* |String |Source image or folder path - in fodler case, we can put a list of folder, just split folders with `,`||
 |left_icon |String |Left icon's path||
 |right_icon |String |Right icon's path||
 |output_path |String |Output file's path|source_image|
